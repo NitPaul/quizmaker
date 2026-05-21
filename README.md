@@ -32,21 +32,32 @@ QuizMaker is a full-stack web app that turns notes, pasted text, or PDFs into au
 
 > The previews below are stylized SVG mockups so the README renders cleanly out of the box. Real PNG screenshots are dropped into [`docs/screenshots/`](docs/screenshots/) as the live app is captured.
 
-| Login + marketing | Home (logged in) |
-|---|---|
-| ![Login](docs/screenshots/01-login.svg) | ![Home](docs/screenshots/02-home.svg) |
+### Login + marketing
+<p align="center"><img src="docs/screenshots/01-login.svg" alt="Login + marketing" width="900"/></p>
 
-| Flashcard mode | Exam mode |
-|---|---|
-| ![Flashcards](docs/screenshots/03-flashcard.svg) | ![Exam](docs/screenshots/04-exam.svg) |
+### Home (logged in) — three quiz sources
+<p align="center"><img src="docs/screenshots/02-home.svg" alt="Home page" width="900"/></p>
 
-| Results + PDF export | RAG (PDF → quiz) |
-|---|---|
-| ![Results](docs/screenshots/05-results.svg) | ![RAG](docs/screenshots/06-rag.svg) |
+### Flashcard mode
+<p align="center"><img src="docs/screenshots/03-flashcard.svg" alt="Flashcard mode" width="900"/></p>
 
-| Leaderboard | Dark mode | Swagger UI |
-|---|---|---|
-| ![Leaderboard](docs/screenshots/07-leaderboard.svg) | ![Dark mode](docs/screenshots/08-dark.svg) | ![Swagger](docs/screenshots/09-swagger.svg) |
+### Exam mode — sticky timer, submit-all
+<p align="center"><img src="docs/screenshots/04-exam.svg" alt="Exam mode" width="900"/></p>
+
+### Results page — score, summary, PDF export
+<p align="center"><img src="docs/screenshots/05-results.svg" alt="Results page" width="900"/></p>
+
+### RAG builder — pick a PDF, generate grounded MCQs
+<p align="center"><img src="docs/screenshots/06-rag.svg" alt="RAG builder" width="900"/></p>
+
+### Leaderboard — best score per user, your rank highlighted
+<p align="center"><img src="docs/screenshots/07-leaderboard.svg" alt="Leaderboard" width="900"/></p>
+
+### Dark mode
+<p align="center"><img src="docs/screenshots/08-dark.svg" alt="Dark mode" width="900"/></p>
+
+### Swagger UI — OpenAPI 3 docs at `/api/docs/`
+<p align="center"><img src="docs/screenshots/09-swagger.svg" alt="Swagger UI" width="900"/></p>
 
 ---
 
