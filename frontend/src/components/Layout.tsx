@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { useAuthStore } from '../store/auth'
 import { useThemeStore } from '../store/theme'
+import { Footer } from './Footer'
 import { HelpModal } from './HelpModal'
 
 export function Layout() {
@@ -17,7 +18,7 @@ export function Layout() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
+    <div className="min-h-screen flex flex-col bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 transition-colors">
       <header className="border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
         <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-6 min-w-0">
@@ -79,10 +80,11 @@ export function Layout() {
       </header>
       <main
         key={location.pathname}
-        className="max-w-6xl mx-auto px-4 py-8 animate-fade-in"
+        className="flex-1 w-full max-w-6xl mx-auto px-4 py-8 animate-fade-in"
       >
         <Outlet />
       </main>
+      <Footer />
       <HelpModal open={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>
   )
