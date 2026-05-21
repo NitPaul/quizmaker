@@ -1,0 +1,52 @@
+# ────────── Python / Django ──────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+coverage.xml
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+staticfiles/
+
+# ────────── Node / Frontend ──────────
+node_modules/
+dist/
+dist-ssr/
+.vite/
+*.local
+
+# ────────── Env / Secrets ──────────
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# ────────── IDE / OS ──────────
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# ────────── Misc ──────────
+*.tsbuildinfo
+celerybeat-schedule
+celerybeat.pid

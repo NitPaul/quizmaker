@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Quiz Generator</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- jsPDF for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.23/jspdf.plugin.autotable.min.js"></script>
+    <!-- SheetJS for XLSX file parsing -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f0f2f5;
+            --bg-secondary: white;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border-color: #e5e7eb;
+            --border-color-light: #f3f4f6;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --indigo-50: #eef2ff;
+            --indigo-100: #e0e7ff;
+            --indigo-200: #c7d2fe;
+            --indigo-600: #4f46e5;
+            --indigo-700: #4338ca;
+            --purple-600: #9333ea;
+            --purple-700: #7e22ce;
+            --red-600: #dc2626;
+            --red-700: #b91c1c;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+
+            /* New Button Variables for better theming */
+            --flashcard-btn-bg: var(--indigo-100);
+            --flashcard-btn-text: var(--indigo-700);
+            --review-btn-bg: var(--indigo-50);
+            --review-btn-text: var(--indigo-700);
+            --quit-btn-bg: var(--red-600);
+            --quit-btn-text: white;
+            --next-btn-bg: var(--gray-800);
+            --next-btn-text: white;
+        }
+
+        html.dark {
+            --bg-primary: #111827;
+            --bg-secondary: #1f2937;
+            --text-primary: #f9fafb;
+            --text-secondary: #9ca3af;
+            --border-color: #374151;
+            --border-color-light: #374151;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+            --indigo-50: #312e81;
+            --indigo-100: #3730a3;
+            --indigo-200: #c7d2fe;
+            --indigo-600: #6366f1;
+            --indigo-700: #4338ca; 
+            --purple-600: #a855f7;
+            --purple-700: #c084fc;
+            --red-600: #f87171;
+            --red-700: #ef4444;
+            --gray-800: #f9fafb;
+            --gray-900: #f9fafb;
+
+            /* Dark Mode Button Overrides */
+            --flashcard-btn-text: var(--indigo-200); /* Lighter text for contrast */
+            --review-btn-text: var(--indigo-200); /* Lighter text for contrast */
+            --quit-btn-text: #111827; /* Dark text for contrast on light red */
+            --next-btn-text: #111827; /* Dark text for contrast on white bg */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .app-container {
+            min-height: 100vh;
+            background-color: var(--bg-primary);
+        }
+        .main-card {
+            background-color: var(--bg-secondary);
+            transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+        }
+        .main-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        html.dark .main-card:hover {
+             box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+        }
+        .setup-card, .results-card, .review-card, .exam-card {
+            background-color: var(--bg-secondary);
+        }
+        h1, h2 {
+            color: var(--text-primary);
+        }
+        p, label {
+            color: var(--text-secondary);
+        }
+        input[type="number"], input[type="password"], textarea {
+            background-color: var(--bg-secondary);
+            border-color: var(--border-color);
+            color: var(--text-primary);
+        }
+        .flashcard-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flashcard.flipped .flashcard-inner { transform: rotateY(180deg); }
+        .flashcard-front, .flashcard-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 1.5rem; text-align: center; border-radius: 1rem;
+            box-shadow: var(--card-shadow);
+        }
+        .flashcard-front {
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            justify-content: flex-start;
+        }
+        .flashcard-back {
+            background-color: var(--indigo-700);
+            color: white;
+            transform: rotateY(180deg);
+        }
+        .option-btn {
+            border-color: var(--border-color);
+        }
+        .exam-option-label {
+            border-color: var(--border-color);
+        }
+        .exam-option-label:has(input:checked) {
+            background-color: var(--indigo-100);
+            border-color: var(--indigo-600);
+        }
+        #night-mode-toggle:checked ~ .dot {
+            transform: translateX(100%);
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div id="app-container" class="app-container flex items-center justify-center p-4">
+
+        <!-- Night Mode Toggle -->
+        <div class="absolute top-6 right-6 z-30">
+            <label for="night-mode-toggle" class="flex items-center cursor-pointer">
+                <div class="relative">
+                    <input type="checkbox" id="night-mode-toggle" class="sr-only">
+                    <div class="block bg-gray-300 dark:bg-gray-600 w-14 h-8 rounded-full"></div>
+                    <div class="dot absolute left-1 top-1 bg-white w-6 h-6 rounded-full transition"></div>
+                </div>
+            </label>
+        </div>
+
+        <!-- Home Screen -->
+        <div id="home-screen" class="w-full max-w-4xl text-center">
+            <h1 class="text-4xl font-bold" style="font-family: 'Poppins', sans-serif;">Advanced Quiz Generator</h1>
+            <p class="mt-2 text-lg mb-10">Choose your method to start studying.</p>
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- CSV Mode Card -->
+                <div id="csv-mode-card" class="main-card p-8 rounded-2xl shadow-lg cursor-pointer">
+                    <h2 class="text-2xl font-bold text-indigo-700" style="font-family: 'Poppins', sans-serif;">🚀 Instant Quiz</h2>
+                    <p class="mt-2">Upload a pre-made CSV with questions and options for a fast, offline quiz.</p>
+                </div>
+                <!-- AI Mode Card -->
+                <div id="ai-mode-card" class="main-card p-8 rounded-2xl shadow-lg cursor-pointer">
+                    <h2 class="text-2xl font-bold text-purple-700" style="font-family: 'Poppins', sans-serif;">✨ AI-Powered Generation</h2>
+                    <p class="mt-2">Paste text from a PDF, provide an API key, and generate a quiz automatically.</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Common back button -->
+        <button id="back-to-home-btn" class="hidden absolute top-6 left-6 text-gray-500 hover:text-gray-800 bg-white dark:bg-gray-700 dark:text-gray-300 dark:hover:text-white rounded-full p-2 shadow-md z-20">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+        </button>
+
+        <!-- CSV Setup Screen -->
+        <div id="csv-setup-screen" class="hidden w-full max-w-lg p-8 space-y-6 setup-card rounded-2xl shadow-lg">
+             <h1 class="text-3xl font-bold text-center" style="font-family: 'Poppins', sans-serif;">Instant Quiz Setup</h1>
+             <div>
+                <label for="csv-file" class="block text-sm font-medium mb-2">1. Upload File (CSV or XLSX)</label>
+                <input type="file" id="csv-file" accept=".csv, .xlsx, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" class="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 dark:file:bg-indigo-900/50 file:text-indigo-700 dark:file:text-indigo-300 hover:file:bg-indigo-100 dark:hover:file:bg-indigo-900">
+                <p class="mt-1 text-xs">Format: `Question,CorrectAnswer,Option2,Option3,Option4`</p>
+                <div id="file-name-display" class="mt-2 text-sm text-green-700 dark:text-green-400 font-medium"></div>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">2. Configure Quiz</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <input type="number" id="num-questions" placeholder="No. of Questions" class="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    <input type="number" id="timer" placeholder="Timer (minutes, 0=none)" class="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-indigo-500">
+                </div>
+                 <div class="mt-4">
+                    <label for="randomness-slider" class="block text-sm font-medium">Randomness: <span id="randomness-value" class="font-bold text-indigo-700 dark:text-indigo-300">100%</span></label>
+                    <input type="range" id="randomness-slider" min="0" max="100" value="100" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 accent-indigo-600">
+                </div>
+            </div>
+             <div class="space-y-3 pt-2">
+                <label class="block text-sm font-medium mb-2">3. Choose Mode</label>
+                <div class="grid grid-cols-2 gap-4">
+                    <button id="start-flashcard-btn" class="w-full py-3 px-4 rounded-lg font-semibold" style="background-color: var(--flashcard-btn-bg); color: var(--flashcard-btn-text);">🚀 FlashCard</button>
+                    <button id="start-exam-btn" class="w-full py-3 px-4 rounded-lg font-semibold text-white" style="background-color: var(--indigo-600);">📝 Exam</button>
+                </div>
+            </div>
+            <div id="csv-setup-error" class="text-center text-sm text-red-600 dark:text-red-400 mt-2"></div>
+        </div>
+
+        <!-- AI Setup Screen -->
+        <div id="ai-setup-screen" class="hidden w-full max-w-2xl p-8 space-y-6 setup-card rounded-2xl shadow-lg">
+            <h1 class="text-3xl font-bold text-center" style="font-family: 'Poppins', sans-serif;">Generate Quiz with AI</h1>
+             <div>
+                <label for="pdf-text" class="block text-sm font-medium mb-2">1. Paste Content</label>
+                <textarea id="pdf-text" rows="8" class="block w-full p-3 border rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500" placeholder="Paste the text from your PDF or study material here..."></textarea>
+            </div>
+            <div>
+                <label class="block text-sm font-medium mb-2">2. AI Configuration</label>
+                <div class="grid md:grid-cols-2 gap-4">
+                    <input type="number" id="ai-num-questions" placeholder="No. of Questions to Generate" class="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+                    <input type="password" id="api-key-input" placeholder="Your Gemini API Key" class="block w-full px-3 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-purple-500 focus:border-purple-500">
+                </div>
+            </div>
+            <button id="generate-ai-quiz-btn" class="w-full py-3 px-4 rounded-lg text-white font-semibold disabled:opacity-50" style="background-color: var(--purple-600);">Generate Quiz</button>
+             <div id="ai-setup-error" class="text-center text-sm text-red-600 dark:text-red-400 mt-2"></div>
+        </div>
+
+        <!-- FlashCard Quiz Screen -->
+        <div id="quiz-screen" class="hidden w-full max-w-2xl text-center">
+             <div class="flex justify-between items-center mb-4 px-2">
+                <div id="progress" class="text-lg font-semibold"></div>
+                <div class="flex items-center space-x-4">
+                    <div id="timer-display" class="text-lg font-bold" style="color: var(--indigo-600);"></div>
+                    <button id="pause-btn" class="py-1 px-3 text-sm font-medium rounded-lg border" style="background-color: var(--bg-secondary); border-color: var(--border-color);">Pause</button>
+                    <button id="quit-btn" class="py-1 px-3 text-sm font-medium rounded-lg" style="background-color: var(--quit-btn-bg); color: var(--quit-btn-text);">Quit</button>
+                </div>
+            </div>
+            <div id="pause-overlay" class="absolute inset-0 bg-white/80 dark:bg-black/80 backdrop-blur-sm flex-col items-center justify-center rounded-2xl hidden z-10">
+                <h2 class="text-3xl font-bold">Paused</h2><p class="mt-2">Click "Resume" to continue.</p>
+            </div>
+            <div class="flashcard h-[28rem]"><div class="flashcard-inner">
+                <div class="flashcard-front">
+                    <p id="question-text" class="text-xl font-medium mb-4"></p>
+                    <div id="options-container" class="w-full space-y-3"></div>
+                </div>
+                <div class="flashcard-back">
+                    <p id="answer-text" class="text-2xl font-semibold"></p>
+                    <p id="result-text" class="text-lg mt-2"></p>
+                </div>
+            </div></div>
+            <div class="mt-6"><button id="next-question-btn" class="hidden w-full py-3 px-4 rounded-lg font-semibold" style="background-color: var(--next-btn-bg); color: var(--next-btn-text);">Next Question</button></div>
+        </div>
+
+        <!-- Exam Mode Screen -->
+        <div id="exam-screen" class="hidden w-full max-w-4xl p-8 exam-card rounded-2xl shadow-lg">
+            <div class="flex justify-between items-center mb-6 sticky top-0 py-4 border-b" style="background-color: var(--bg-secondary); border-color: var(--border-color);">
+                <h1 class="text-3xl font-bold" style="font-family: 'Poppins', sans-serif;">Exam Mode</h1>
+                <div id="exam-timer-display" class="text-lg font-bold" style="color: var(--indigo-600);"></div>
+            </div>
+            <div id="exam-questions-container" class="space-y-8 max-h-[70vh] overflow-y-auto pr-4">
+                <!-- Exam questions will be dynamically inserted here -->
+            </div>
+            <div class="text-center mt-8">
+                <button id="submit-exam-btn" class="py-3 px-8 rounded-lg text-white font-semibold" style="background-color: var(--indigo-600);">Submit Exam</button>
+            </div>
+        </div>
+
+        <!-- Results Screen (Shared) -->
+        <div id="results-screen" class="hidden w-full max-w-lg p-8 space-y-6 results-card rounded-2xl shadow-lg text-center">
+             <h1 class="text-3xl font-bold" style="font-family: 'Poppins', sans-serif;">Quiz Complete!</h1>
+            <p class="text-5xl font-bold" id="score-text" style="color: var(--indigo-600);"></p>
+            <p id="score-details"></p>
+            <div class="space-y-4 pt-4">
+                <button id="review-answers-btn" class="w-full py-3 px-4 border rounded-lg font-semibold" style="background-color: var(--review-btn-bg); color: var(--review-btn-text); border-color: var(--border-color-light);">Review Answers</button>
+                <button id="download-pdf-btn" class="w-full py-3 px-4 rounded-lg text-white font-semibold" style="background-color: var(--indigo-600);">Download Results PDF</button>
+                <button id="new-quiz-btn" class="w-full py-3 px-4 border rounded-lg font-semibold" style="background-color: var(--bg-secondary); border-color: var(--border-color);">Start New Quiz</button>
+            </div>
+        </div>
+        
+         <!-- Review Screen (Shared) -->
+        <div id="review-screen" class="hidden w-full max-w-3xl p-8 review-card rounded-2xl shadow-lg">
+             <h1 class="text-3xl font-bold text-center mb-6" style="font-family: 'Poppins', sans-serif;">Review Your Answers</h1>
+             <div id="review-container" class="space-y-6 max-h-[70vh] overflow-y-auto pr-4"></div>
+             <div class="text-center mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                 <button id="back-to-results-btn" class="w-full py-3 px-6 border rounded-lg font-semibold" style="background-color: var(--bg-secondary); border-color: var(--border-color);">Back to Results</button>
+                 <button id="download-review-pdf-btn" class="w-full py-3 px-6 rounded-lg text-white font-semibold" style="background-color: var(--indigo-600);">Download Review</button>
+             </div>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div id="confirm-back-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
+            <div class="p-8 rounded-2xl shadow-lg w-full max-w-sm text-center" style="background-color: var(--bg-secondary);">
+                <h2 class="text-2xl font-bold" style="font-family: 'Poppins', sans-serif;">Are you sure?</h2>
+                <p class="mt-2 mb-6">Your current quiz progress will be lost if you go back.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <button id="cancel-back-btn" class="py-3 px-4 border rounded-lg font-semibold" style="background-color: var(--bg-secondary); border-color: var(--border-color);">Stay</button>
+                    <button id="confirm-back-action-btn" class="py-3 px-4 rounded-lg text-white font-semibold" style="background-color: var(--red-600);">Go Back</button>
+                </div>
+            </div>
+        </div>
+        
+    </div>
+
+    <script>
+        // --- DOM Elements ---
+        const screens = {
+            home: document.getElementById('home-screen'),
+            csvSetup: document.getElementById('csv-setup-screen'),
+            aiSetup: document.getElementById('ai-setup-screen'),
+            quiz: document.getElementById('quiz-screen'),
+            exam: document.getElementById('exam-screen'),
+            results: document.getElementById('results-screen'),
+            review: document.getElementById('review-screen'),
+        };
+        const backToHomeBtn = document.getElementById('back-to-home-btn');
+        // Home
+        const csvModeCard = document.getElementById('csv-mode-card');
+        const aiModeCard = document.getElementById('ai-mode-card');
+        // CSV Setup
+        const csvFileInput = document.getElementById('csv-file');
+        const fileNameDisplay = document.getElementById('file-name-display');
+        const numQuestionsInput = document.getElementById('num-questions');
+        const timerInput = document.getElementById('timer');
+        const randomnessSlider = document.getElementById('randomness-slider');
+        const randomnessValue = document.getElementById('randomness-value');
+        const startFlashcardBtn = document.getElementById('start-flashcard-btn');
+        const startExamBtn = document.getElementById('start-exam-btn');
+        const csvSetupError = document.getElementById('csv-setup-error');
+        // AI Setup
+        const pdfTextInput = document.getElementById('pdf-text');
+        const aiNumQuestionsInput = document.getElementById('ai-num-questions');
+        const apiKeyInput = document.getElementById('api-key-input');
+        const generateAiQuizBtn = document.getElementById('generate-ai-quiz-btn');
+        const aiSetupError = document.getElementById('ai-setup-error');
+        // Flashcard Quiz
+        const progressText = document.getElementById('progress');
+        const timerDisplay = document.getElementById('timer-display');
+        const flashcard = document.querySelector('.flashcard');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const answerText = document.getElementById('answer-text');
+        const resultText = document.getElementById('result-text');
+        const nextQuestionBtn = document.getElementById('next-question-btn');
+        const pauseBtn = document.getElementById('pause-btn');
+        const quitBtn = document.getElementById('quit-btn');
+        const pauseOverlay = document.getElementById('pause-overlay');
+        // Exam Mode
+        const examTimerDisplay = document.getElementById('exam-timer-display');
+        const examQuestionsContainer = document.getElementById('exam-questions-container');
+        const submitExamBtn = document.getElementById('submit-exam-btn');
+        // Results & Review
+        const scoreText = document.getElementById('score-text');
+        const scoreDetails = document.getElementById('score-details');
+        const downloadPdfBtn = document.getElementById('download-pdf-btn');
+        const newQuizBtn = document.getElementById('new-quiz-btn');
+        const reviewAnswersBtn = document.getElementById('review-answers-btn');
+        const reviewContainer = document.getElementById('review-container');
+        const backToResultsBtn = document.getElementById('back-to-results-btn');
+        const downloadReviewPdfBtn = document.getElementById('download-review-pdf-btn');
+        // Night Mode
+        const nightModeToggle = document.getElementById('night-mode-toggle');
+        // Confirmation Modal
+        const confirmBackModal = document.getElementById('confirm-back-modal');
+        const cancelBackBtn = document.getElementById('cancel-back-btn');
+        const confirmBackActionBtn = document.getElementById('confirm-back-action-btn');
+
+
+        // --- App State ---
+        let allQuestions = [];
+        let quizQuestions = [];
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timerInterval;
+        let isPaused = false;
+        let timeLeftInSeconds = 0;
+
+        // --- Navigation ---
+        const showScreen = (screenName) => {
+            Object.values(screens).forEach(s => s.classList.add('hidden'));
+            screens[screenName].classList.remove('hidden');
+            backToHomeBtn.classList.toggle('hidden', screenName === 'home');
+        };
+        
+        function goHome() {
+            clearInterval(timerInterval);
+            showScreen('home');
+        }
+
+        csvModeCard.addEventListener('click', () => showScreen('csvSetup'));
+        aiModeCard.addEventListener('click', () => showScreen('aiSetup'));
+        backToHomeBtn.addEventListener('click', () => {
+            const isSessionActive = !screens.quiz.classList.contains('hidden') 
+                                 || !screens.exam.classList.contains('hidden') 
+                                 || !screens.results.classList.contains('hidden') 
+                                 || !screens.review.classList.contains('hidden');
+            if (isSessionActive) {
+                confirmBackModal.classList.remove('hidden');
+            } else {
+                goHome(); // Go home directly if not in a session
+            }
+        });
+        newQuizBtn.addEventListener('click', () => showScreen('home'));
+
+        // --- Event Listeners ---
+        startFlashcardBtn.addEventListener('click', startCsvQuiz);
+        startExamBtn.addEventListener('click', startExamMode);
+        generateAiQuizBtn.addEventListener('click', generateAndStartAiQuiz);
+        csvFileInput.addEventListener('change', handleFileUpload);
+        nextQuestionBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            displayQuestion();
+        });
+        downloadPdfBtn.addEventListener('click', generatePDF);
+        pauseBtn.addEventListener('click', togglePause);
+        quitBtn.addEventListener('click', endQuiz);
+        submitExamBtn.addEventListener('click', submitExam);
+        reviewAnswersBtn.addEventListener('click', showReviewScreen);
+        backToResultsBtn.addEventListener('click', () => showScreen('results'));
+        downloadReviewPdfBtn.addEventListener('click', generateReviewPDF);
+        randomnessSlider.addEventListener('input', (e) => {
+            randomnessValue.textContent = `${e.target.value}%`;
+        });
+
+        // Modal Listeners
+        cancelBackBtn.addEventListener('click', () => {
+            confirmBackModal.classList.add('hidden');
+        });
+        confirmBackActionBtn.addEventListener('click', () => {
+            confirmBackModal.classList.add('hidden');
+            goHome();
+        });
+
+
+        // --- Night Mode Logic ---
+        function applyTheme(theme) {
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark');
+                nightModeToggle.checked = true;
+            } else {
+                document.documentElement.classList.remove('dark');
+                nightModeToggle.checked = false;
+            }
+        }
+
+        nightModeToggle.addEventListener('change', () => {
+            const theme = nightModeToggle.checked ? 'dark' : 'light';
+            localStorage.setItem('theme', theme);
+            applyTheme(theme);
+        });
+        
+        // Apply saved theme on initial load
+        applyTheme(localStorage.getItem('theme') || 'light');
+
+
+        // --- CSV Mode Logic ---
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            fileNameDisplay.textContent = `File: ${file.name}`;
+            
+            const reader = new FileReader();
+
+            if (file.type === 'text/csv' || file.name.endsWith('.csv')) {
+                reader.onload = (e) => {
+                    try {
+                        allQuestions = parseCSV(e.target.result);
+                        csvSetupError.textContent = '';
+                    } catch(error) {
+                        csvSetupError.textContent = error.message;
+                        allQuestions = [];
+                    }
+                };
+                reader.readAsText(file);
+            } else if (file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel' || file.name.endsWith('.xlsx')) {
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, {type: 'array'});
+                        const firstSheetName = workbook.SheetNames[0];
+                        const worksheet = workbook.Sheets[firstSheetName];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, {header: 1});
+                        allQuestions = processSheetData(jsonData);
+                        csvSetupError.textContent = '';
+                    } catch (error) {
+                        csvSetupError.textContent = "Error processing XLSX file. Check if it's a valid Excel file and not a CSV with an .xlsx extension.";
+                        allQuestions = [];
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                csvSetupError.textContent = "Unsupported file type. Please upload a CSV or XLSX file.";
+                allQuestions = []; 
+            }
+        }
+
+        function processSheetData(rows) {
+             if (rows.length < 2) throw new Error("Sheet is empty or has only a header.");
+             return rows.slice(1).map((row, i) => {
+                if (row.length < 5) throw new Error(`Row ${i+2} is malformed. At least 5 columns required.`);
+                return {
+                    question: row[0],
+                    correctAnswer: row[1],
+                    options: row.slice(1, 5),
+                    userAnswer: null
+                };
+            }).filter(q => q.question && q.correctAnswer);
+        }
+
+        function parseCSV(text) {
+            const rows = text.split('\n').filter(row => row.trim() !== '');
+            if (rows.length < 2) throw new Error("CSV is empty or has only a header.");
+            
+            return rows.slice(1).map((row, i) => {
+                const columns = row.split(',').map(c => c.trim().replace(/"/g, ''));
+                if (columns.length < 5) throw new Error(`Row ${i+2} is malformed. At least 5 columns required.`);
+                return {
+                    question: columns[0],
+                    correctAnswer: columns[1],
+                    options: columns.slice(1, 5), // Assumes CorrectAnswer is first option
+                    userAnswer: null
+                };
+            }).filter(q => q.question && q.correctAnswer);
+        }
+
+        function validateCsvInputs() {
+            if (allQuestions.length === 0) {
+                csvSetupError.textContent = 'Please upload a valid CSV file first.';
+                return false;
+            }
+            const num = parseInt(numQuestionsInput.value, 10);
+            if (isNaN(num) || num < 1) {
+                 csvSetupError.textContent = 'Please enter a valid number of questions.';
+                 return false;
+            }
+            if (num > allQuestions.length) {
+                csvSetupError.textContent = `Not enough questions. Max: ${allQuestions.length}.`;
+                return false;
+            }
+            csvSetupError.textContent = '';
+            
+            const randomnessPercent = parseInt(randomnessSlider.value, 10);
+            const numToKeepOrdered = Math.round(num * (1 - (randomnessPercent / 100)));
+            const numToShuffle = num - numToKeepOrdered;
+
+            const orderedPart = allQuestions.slice(0, numToKeepOrdered);
+
+            const remainingForRandom = allQuestions.slice(numToKeepOrdered);
+            const shuffledRemainder = remainingForRandom.sort(() => 0.5 - Math.random());
+            const randomPart = shuffledRemainder.slice(0, numToShuffle);
+
+            quizQuestions = orderedPart.concat(randomPart).sort(() => 0.5 - Math.random());
+            
+            return true;
+        }
+        
+        function startCsvQuiz() {
+            if (!validateCsvInputs()) return;
+            const timer = parseInt(timerInput.value, 10) || 0;
+            initializeQuiz(timer, 'quiz');
+        }
+
+        function startExamMode() {
+            if (!validateCsvInputs()) return;
+            const timer = parseInt(timerInput.value, 10) || 0;
+            initializeQuiz(timer, 'exam');
+        }
+
+
+        // --- AI Mode Logic ---
+        async function generateAndStartAiQuiz() {
+            const context = pdfTextInput.value.trim();
+            const num = parseInt(aiNumQuestionsInput.value, 10);
+            const apiKey = apiKeyInput.value.trim();
+
+            if (!context || !apiKey || isNaN(num) || num < 1) {
+                aiSetupError.textContent = "Please fill all fields correctly.";
+                return;
+            }
+            
+            aiSetupError.textContent = "";
+            generateAiQuizBtn.disabled = true;
+            generateAiQuizBtn.textContent = 'Generating...';
+
+            try {
+                const generated = await callGeminiForQuiz(context, num, apiKey);
+                if (!generated || generated.length === 0) {
+                   throw new Error("AI failed to generate a valid quiz.");
+                }
+                quizQuestions = generated.map(q => ({ ...q, userAnswer: null }));
+                initializeQuiz(0, 'exam'); 
+            } catch (error) {
+                 aiSetupError.textContent = `Error: ${error.message}`;
+            } finally {
+                generateAiQuizBtn.disabled = false;
+                generateAiQuizBtn.textContent = 'Generate Quiz';
+            }
+        }
+        
+        async function callGeminiForQuiz(context, numQuestions, apiKey) {
+            const API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-05-20:generateContent?key=${apiKey}`;
+            const userQuery = `Based on the following text, generate ${numQuestions} multiple-choice questions. For each question, provide one correct answer and three plausible incorrect options. The options array must contain 4 unique items including the correct answer.
+
+                Context: """${context}"""
+            `;
+            const payload = {
+                 contents: [{ parts: [{ text: userQuery }] }],
+                 generationConfig: {
+                     responseMimeType: "application/json",
+                     responseSchema: {
+                         type: "OBJECT",
+                         properties: {
+                             quiz: {
+                                 type: "ARRAY",
+                                 items: {
+                                     type: "OBJECT",
+                                     properties: {
+                                         question: { type: "STRING" },
+                                         correctAnswer: { type: "STRING" },
+                                         options: { type: "ARRAY", items: { type: "STRING" } }
+                                     },
+                                     required: ["question", "correctAnswer", "options"]
+                                 }
+                             }
+                         }
+                     }
+                 }
+             };
+
+            const response = await fetch(API_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            if (!response.ok) {
+                const errorBody = await response.json();
+                throw new Error(errorBody.error?.message || `HTTP error! status: ${response.status}`);
+            }
+            const result = await response.json();
+            const jsonText = result.candidates?.[0]?.content?.parts?.[0]?.text;
+            return JSON.parse(jsonText).quiz;
+        }
+
+
+        // --- Shared Quiz Logic ---
+        function initializeQuiz(timerMinutes, mode) {
+            currentQuestionIndex = 0;
+            score = 0;
+            isPaused = false;
+            clearInterval(timerInterval);
+            timeLeftInSeconds = timerMinutes * 60;
+            
+            showScreen(mode);
+
+            if (mode === 'quiz') {
+                displayQuestion();
+            } else if (mode === 'exam') {
+                displayExam();
+            }
+            startTimer(mode);
+        }
+
+        function displayQuestion() {
+            if (currentQuestionIndex >= quizQuestions.length) {
+                endQuiz();
+                return;
+            }
+            flashcard.classList.remove('flipped');
+            nextQuestionBtn.classList.add('hidden');
+            const current = quizQuestions[currentQuestionIndex];
+            questionText.textContent = current.question;
+            answerText.textContent = current.correctAnswer;
+            resultText.textContent = '';
+            progressText.textContent = `Question ${currentQuestionIndex + 1} of ${quizQuestions.length}`;
+            
+            optionsContainer.innerHTML = '';
+            const shuffledOptions = [...current.options].sort(() => Math.random() - 0.5);
+            shuffledOptions.forEach(option => {
+                const button = document.createElement('button');
+                button.className = 'option-btn w-full text-left p-3 border-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200';
+                button.textContent = option;
+                button.onclick = () => handleAnswer(option, button);
+                optionsContainer.appendChild(button);
+            });
+        }
+        
+        function handleAnswer(selectedOption, button) {
+            const current = quizQuestions[currentQuestionIndex];
+            current.userAnswer = selectedOption;
+            const isCorrect = selectedOption === current.correctAnswer;
+
+            document.querySelectorAll('.option-btn').forEach(btn => {
+                btn.disabled = true;
+                if(btn.textContent === current.correctAnswer) {
+                    btn.classList.add('bg-green-200', 'dark:bg-green-800/50', 'border-green-400');
+                }
+            });
+
+            if (isCorrect) {
+                score++;
+                resultText.textContent = 'Correct!';
+                resultText.className = 'text-lg mt-2 text-green-300';
+                button.classList.add('!bg-green-500', '!text-white', '!border-green-500');
+            } else {
+                resultText.textContent = 'Incorrect!';
+                resultText.className = 'text-lg mt-2 text-red-300';
+                button.classList.add('!bg-red-500', '!text-white', '!border-red-500');
+            }
+
+            flashcard.classList.add('flipped');
+            nextQuestionBtn.classList.remove('hidden');
+        }
+
+        function displayExam() {
+            examQuestionsContainer.innerHTML = '';
+            quizQuestions.forEach((q, index) => {
+                const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+                const optionsHtml = shuffledOptions.map(option => `
+                    <label class="exam-option-label block w-full text-left p-3 border-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-all duration-200 cursor-pointer">
+                        <input type="radio" name="question-${index}" value="${option}" class="mr-3 accent-indigo-500">${option}
+                    </label>
+                `).join('');
+
+                const questionHtml = `
+                    <div class="text-left py-4">
+                        <p class="font-semibold">${index + 1}. ${q.question}</p>
+                        <div class="mt-3 space-y-2">${optionsHtml}</div>
+                    </div>
+                `;
+                examQuestionsContainer.innerHTML += questionHtml;
+            });
+        }
+
+        function submitExam() {
+            score = 0;
+            quizQuestions.forEach((q, index) => {
+                const selectedOption = document.querySelector(`input[name="question-${index}"]:checked`);
+                q.userAnswer = selectedOption ? selectedOption.value : null;
+                if (q.userAnswer === q.correctAnswer) {
+                    score++;
+                }
+            });
+            endQuiz();
+        }
+
+        function startTimer(mode) {
+            const displayEl = mode === 'exam' ? examTimerDisplay : timerDisplay;
+            if (timeLeftInSeconds <= 0) {
+                displayEl.textContent = 'No Timer';
+                return;
+            };
+            const update = () => {
+                if (isPaused) return;
+                const min = Math.floor(timeLeftInSeconds / 60);
+                const sec = timeLeftInSeconds % 60;
+                displayEl.textContent = `${min}:${sec < 10 ? '0' : ''}${sec}`;
+                if (timeLeftInSeconds-- <= 0) {
+                     if (mode === 'exam') submitExam();
+                     else endQuiz();
+                }
+            };
+            update();
+            timerInterval = setInterval(update, 1000);
+        }
+        
+        function togglePause() {
+            isPaused = !isPaused;
+            pauseBtn.textContent = isPaused ? 'Resume' : 'Pause';
+            pauseOverlay.classList.toggle('hidden');
+        }
+
+        function endQuiz() {
+            clearInterval(timerInterval);
+            showScreen('results');
+            scoreText.textContent = `${score} / ${quizQuestions.length}`;
+            const percentage = quizQuestions.length > 0 ? ((score / quizQuestions.length) * 100).toFixed(1) : 0;
+            scoreDetails.textContent = `You got ${percentage}% correct.`;
+        }
+        
+        function showReviewScreen() {
+            showScreen('review');
+            reviewContainer.innerHTML = quizQuestions.map((q, index) => {
+                const isCorrect = q.userAnswer === q.correctAnswer;
+                let reviewCardHtml = `<div class="p-4 border rounded-lg" style="background-color: var(--bg-secondary); border-color: var(--border-color);"><p class="font-semibold">${index + 1}. ${q.question}</p><div class="mt-2">`;
+                
+                const userChoiceClasses = isCorrect ? 'bg-green-100 dark:bg-green-800/50 border-green-300' : 'bg-red-100 dark:bg-red-800/50 border-red-300';
+                
+                q.options.forEach(option => {
+                    let classes = 'block w-full text-left p-2 my-1 border rounded-md text-sm';
+                    if (option === q.userAnswer) {
+                        classes += ` ${userChoiceClasses}`;
+                    } else if (option === q.correctAnswer) {
+                        classes += ` bg-green-100 dark:bg-green-800/50 border-green-300`;
+                    } else {
+                        // FIX: Increased contrast for other options in light mode for better visibility.
+                        classes += ` bg-blue-100 dark:bg-blue-900/50 border-blue-300 dark:border-blue-600`;
+                    }
+                    reviewCardHtml += `<div class="${classes}">${option}</div>`;
+                });
+                
+                reviewCardHtml += `</div></div>`;
+                return reviewCardHtml;
+
+            }).join('');
+        }
+
+        function generatePDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const incorrect = quizQuestions.filter(q => q.userAnswer !== q.correctAnswer);
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            const headColor = isDarkMode ? [49, 46, 129] : [67, 56, 202];
+            const textColor = isDarkMode ? [240, 240, 240] : [20, 20, 20];
+
+            doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(22);
+            doc.text('Quiz Results', 105, 20, { align: 'center' });
+            doc.setFontSize(16);
+            doc.text(`Final Score: ${score} out of ${quizQuestions.length}`, 20, 40);
+
+            if (incorrect.length > 0) {
+                 doc.setFontSize(18);
+                 doc.text('Incorrectly Answered Questions', 105, 60, { align: 'center' });
+                 const body = incorrect.map(item => [item.question, item.correctAnswer]);
+                 doc.autoTable({
+                     head: [["Question", "Correct Answer"]],
+                     body: body,
+                     startY: 65,
+                     theme: 'striped',
+                     headStyles: { fillColor: headColor },
+                     styles: { overflow: 'linebreak', textColor: [20, 20, 20] }, // Keep table text black for readability
+                     columnStyles: { 0: { cellWidth: 80 }, 1: { cellWidth: 80 } }
+                 });
+            } else {
+                doc.setFontSize(14);
+                doc.text('Congratulations! You answered all questions correctly.', 20, 60);
+            }
+            doc.save('quiz-results.pdf');
+        }
+
+        function generateReviewPDF() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            const headColor = isDarkMode ? [49, 46, 129] : [67, 56, 202];
+            const textColor = isDarkMode ? [240, 240, 240] : [20, 20, 20];
+            
+            doc.setTextColor(textColor[0], textColor[1], textColor[2]);
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(22);
+            doc.text('Quiz Answer Review', 105, 20, { align: 'center' });
+            
+            doc.setFontSize(14);
+            const percentage = quizQuestions.length > 0 ? ((score / quizQuestions.length) * 100).toFixed(1) : 0;
+            doc.text(`Final Score: ${score} / ${quizQuestions.length} (${percentage}%)`, 105, 30, { align: 'center' });
+
+            const body = quizQuestions.map(q => {
+                const otherOptions = q.options.filter(opt => opt !== q.correctAnswer && opt !== q.userAnswer).join('\n');
+                return [
+                    q.question,
+                    q.userAnswer || "Not Answered",
+                    q.correctAnswer,
+                    otherOptions
+                ];
+            });
+
+            doc.autoTable({
+                head: [["Question", "Your Answer", "Correct Answer", "Other Options"]],
+                body: body,
+                startY: 40,
+                theme: 'grid',
+                headStyles: { fillColor: headColor, textColor: [255, 255, 255] },
+                styles: { overflow: 'linebreak', textColor: [10, 10, 10], cellPadding: 2, fontSize: 8 },
+                columnStyles: { 
+                    0: { cellWidth: 60 }, 
+                    1: { cellWidth: 30 },
+                    2: { cellWidth: 30 },
+                    3: { cellWidth: 50 }
+                },
+                didParseCell: function (data) {
+                    // Only apply row coloring to the body
+                    if (data.section === 'body') {
+                        const question = quizQuestions[data.row.index];
+                        if (question) {
+                            const isCorrect = question.userAnswer === question.correctAnswer;
+                            const fillColor = isCorrect ? '#dcfce7' : '#fecaca';
+                            
+                            // Apply fillColor to all cells in the row
+                            if (data.row.cells[0]) data.row.cells[0].styles.fillColor = fillColor;
+                            if (data.row.cells[1]) data.row.cells[1].styles.fillColor = fillColor;
+                            if (data.row.cells[2]) data.row.cells[2].styles.fillColor = fillColor;
+                            if (data.row.cells[3]) data.row.cells[3].styles.fillColor = fillColor;
+                        }
+                    }
+                }
+            });
+
+            doc.save('quiz-review.pdf');
+        }
+
+    </script>
+</body>
+</html>
