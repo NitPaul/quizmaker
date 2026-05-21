@@ -23,8 +23,9 @@ QuizMaker is a full-stack web app that turns notes, pasted text, or PDFs into au
 
 > Built end-to-end as a portfolio project to demonstrate Python, Django, REST API design, AI integration, and modern frontend skills.
 
-**🌐 Live demo:** _frontend_ → `https://quizmaker.vercel.app` · _API docs_ → `https://quizmaker-api.onrender.com/api/docs/`
-*(URLs update after deployment.)*
+**🌐 Live demo:** [**quizmaker-puce.vercel.app**](https://quizmaker-puce.vercel.app) · **API docs (Swagger):** [quizmaker-api-6mze.onrender.com/api/docs/](https://quizmaker-api-6mze.onrender.com/api/docs/)
+
+> The API runs on Render's free tier, which sleeps after 15 min idle — the first request may take ~30s to wake the service, then it's snappy.
 
 ---
 
@@ -224,21 +225,21 @@ cd frontend && npm test    # 18 frontend tests, ~2s
 ## ☁️ Deployment
 
 ### Backend → Render
-The repo ships with `render.yaml` defining a `web` + `worker` service that both build from `backend/Dockerfile`.
+The repo ships with `render.yaml` defining a `web` service that builds from `backend/Dockerfile`.
 
 On Render: **New → Blueprint → connect this repo**, then fill in:
 
 - `DATABASE_URL` — Supabase **Session Pooler** URL (Direct connection is IPv6-only) with `?sslmode=require`.
 - `CELERY_BROKER_URL` and `CELERY_RESULT_BACKEND` — Upstash Redis TLS URL (`rediss://...`).
-- `ALLOWED_HOSTS` — `your-app.onrender.com`.
-- `CSRF_TRUSTED_ORIGINS` — `https://your-app.onrender.com`.
+- `ALLOWED_HOSTS` — your assigned `<service>.onrender.com` host.
+- `CSRF_TRUSTED_ORIGINS` — `https://<service>.onrender.com`.
 - `CORS_ALLOWED_ORIGINS` — your Vercel URL.
 - `GROQ_API_KEY`, `GEMINI_API_KEY`.
 
-The Docker `CMD` runs `migrate` then `gunicorn` automatically on each deploy.
+The Docker `CMD` runs `collectstatic` → `migrate` → `gunicorn` automatically on each deploy. Render's free plan has no background worker, so `CELERY_TASK_ALWAYS_EAGER=true` runs tasks inline (see the architecture note above).
 
 ### Frontend → Vercel
-Point Vercel at the `frontend/` directory. Set `VITE_API_BASE_URL=https://your-app.onrender.com` and deploy. SPA fallback is already wired in `vercel.json`.
+Point Vercel at the `frontend/` directory. Set `VITE_API_BASE_URL=https://<service>.onrender.com` and deploy. SPA fallback is already wired in `vercel.json`.
 
 ### CI
 `.github/workflows/ci.yml` runs on every push and PR to `main`:
