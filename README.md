@@ -95,6 +95,8 @@ flowchart LR
 
 **Why this shape?** The web service stays responsive because anything slow (PDF parsing, embedding, LLM calls) is dispatched to Celery. The frontend polls `/api/v1/tasks/<id>/` until the job finishes. One Postgres instance handles both relational data and 768-dim vector search via `pgvector` + HNSW index — no separate vector DB needed.
 
+> **Note on the live deployment:** Render's free tier doesn't include background workers, so the production demo runs Celery tasks **eagerly** (inline in the web process) via `CELERY_TASK_ALWAYS_EAGER=true`. The async architecture above kicks in when you (a) run locally with a worker, or (b) upgrade Render's worker to a paid plan. The call sites, polling pattern, and code all stay identical.
+
 ### RAG pipeline (per document)
 
 ```

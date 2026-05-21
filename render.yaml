@@ -13,41 +13,16 @@ services:
         value: quizmaker.settings.prod
       - key: DJANGO_SECRET_KEY
         generateValue: true
+      # Render's free plan has no background workers, so we run Celery tasks
+      # eagerly (inline) in the web process. Flip this to false and add a
+      # paid worker service to restore true async execution.
+      - key: CELERY_TASK_ALWAYS_EAGER
+        value: "true"
       - key: ALLOWED_HOSTS
         sync: false
       - key: CSRF_TRUSTED_ORIGINS
         sync: false
       - key: CORS_ALLOWED_ORIGINS
-        sync: false
-      - key: DATABASE_URL
-        sync: false
-      - key: CELERY_BROKER_URL
-        sync: false
-      - key: CELERY_RESULT_BACKEND
-        sync: false
-      - key: GROQ_API_KEY
-        sync: false
-      - key: GEMINI_API_KEY
-        sync: false
-
-  - type: worker
-    name: quizmaker-worker
-    runtime: docker
-    plan: free
-    region: oregon
-    rootDir: backend
-    dockerfilePath: ./Dockerfile
-    dockerCommand: celery -A quizmaker worker -l info --concurrency=2
-    autoDeploy: true
-    envVars:
-      - key: DJANGO_SETTINGS_MODULE
-        value: quizmaker.settings.prod
-      - fromService:
-          name: quizmaker-api
-          type: web
-          envVarKey: DJANGO_SECRET_KEY
-        key: DJANGO_SECRET_KEY
-      - key: ALLOWED_HOSTS
         sync: false
       - key: DATABASE_URL
         sync: false

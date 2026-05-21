@@ -139,6 +139,13 @@ CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 5 * 60
 CELERY_RESULT_EXPIRES = 60 * 60
 
+# Fallback for hosts without a worker (e.g. Render free tier): run tasks
+# inline in the web process. Same call sites, same polling endpoint — the
+# task just finishes before .delay() returns.
+CELERY_TASK_ALWAYS_EAGER = config("CELERY_TASK_ALWAYS_EAGER", default=False, cast=bool)
+CELERY_TASK_STORE_EAGER_RESULT = True
+CELERY_TASK_EAGER_PROPAGATES = False
+
 # Automatic TLS config when using rediss:// (e.g. Upstash, Redis Cloud)
 if CELERY_BROKER_URL.startswith("rediss://"):
     CELERY_BROKER_USE_SSL = {"ssl_cert_reqs": ssl.CERT_REQUIRED}
