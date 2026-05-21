@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Swagger UI preview">
+  <rect width="800" height="500" fill="#fafafa"/>
+  <!-- swagger header -->
+  <rect width="800" height="56" fill="#1b1b1b"/>
+  <text x="24" y="36" font-family="Inter,sans-serif" font-size="16" font-weight="700" fill="#85ea2d">QuizMaker API</text>
+  <text x="180" y="36" font-family="Inter,sans-serif" font-size="11" fill="#9ca3af">/api/schema/</text>
+  <rect x="690" y="14" width="92" height="28" rx="6" fill="#85ea2d"/>
+  <text x="736" y="32" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#1b1b1b" text-anchor="middle">Authorize</text>
+  <!-- title -->
+  <text x="32" y="98" font-family="Inter,sans-serif" font-size="22" font-weight="800" fill="#0f172a">QuizMaker API 0.1.0</text>
+  <text x="32" y="118" font-family="Inter,sans-serif" font-size="12" fill="#6b7280">AI-powered quiz generation with RAG over user-uploaded PDFs.</text>
+  <!-- endpoint rows -->
+  <g transform="translate(32,140)">
+    <rect width="736" height="44" rx="6" fill="#ffffff" stroke="#e5e7eb"/>
+    <rect x="12" y="10" width="62" height="24" rx="4" fill="#49cc90"/>
+    <text x="43" y="27" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">POST</text>
+    <text x="88" y="28" font-family="ui-monospace,monospace" font-size="13" font-weight="600" fill="#3b4151">/api/v1/auth/register/</text>
+    <text x="720" y="28" font-family="Inter,sans-serif" font-size="11" fill="#6b7280" text-anchor="end">Create user</text>
+  </g>
+  <g transform="translate(32,192)">
+    <rect width="736" height="44" rx="6" fill="#ffffff" stroke="#e5e7eb"/>
+    <rect x="12" y="10" width="62" height="24" rx="4" fill="#49cc90"/>
+    <text x="43" y="27" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">POST</text>
+    <text x="88" y="28" font-family="ui-monospace,monospace" font-size="13" font-weight="600" fill="#3b4151">/api/v1/auth/login/</text>
+    <text x="720" y="28" font-family="Inter,sans-serif" font-size="11" fill="#6b7280" text-anchor="end">Returns JWT pair</text>
+  </g>
+  <g transform="translate(32,244)">
+    <rect width="736" height="44" rx="6" fill="#ffffff" stroke="#e5e7eb"/>
+    <rect x="12" y="10" width="62" height="24" rx="4" fill="#61affe"/>
+    <text x="43" y="27" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">GET</text>
+    <text x="88" y="28" font-family="ui-monospace,monospace" font-size="13" font-weight="600" fill="#3b4151">/api/v1/me/</text>
+    <text x="720" y="28" font-family="Inter,sans-serif" font-size="11" fill="#6b7280" text-anchor="end">Profile + aggregate stats</text>
+  </g>
+  <g transform="translate(32,296)">
+    <rect width="736" height="44" rx="6" fill="#ffffff" stroke="#e5e7eb"/>
+    <rect x="12" y="10" width="62" height="24" rx="4" fill="#49cc90"/>
+    <text x="43" y="27" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">POST</text>
+    <text x="88" y="28" font-family="ui-monospace,monospace" font-size="13" font-weight="600" fill="#3b4151">/api/v1/ai/generate-from-text/</text>
+    <text x="720" y="28" font-family="Inter,sans-serif" font-size="11" fill="#6b7280" text-anchor="end">Async — Groq/Gemini quiz</text>
+  </g>
+  <g transform="translate(32,348)">
+    <rect width="736" height="44" rx="6" fill="#ffffff" stroke="#e5e7eb"/>
+    <rect x="12" y="10" width="62" height="24" rx="4" fill="#49cc90"/>
+    <text x="43" y="27" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">POST</text>
+    <text x="88" y="28" font-family="ui-monospace,monospace" font-size="13" font-weight="600" fill="#3b4151">/api/v1/rag/generate/</text>
+    <text x="720" y="28" font-family="Inter,sans-serif" font-size="11" fill="#6b7280" text-anchor="end">Async — RAG-grounded quiz</text>
+  </g>
+  <g transform="translate(32,400)">
+    <rect width="736" height="44" rx="6" fill="#ffffff" stroke="#e5e7eb"/>
+    <rect x="12" y="10" width="62" height="24" rx="4" fill="#61affe"/>
+    <text x="43" y="27" font-family="ui-monospace,monospace" font-size="11" font-weight="700" fill="#fff" text-anchor="middle">GET</text>
+    <text x="88" y="28" font-family="ui-monospace,monospace" font-size="13" font-weight="600" fill="#3b4151">/api/v1/leaderboard/</text>
+    <text x="720" y="28" font-family="Inter,sans-serif" font-size="11" fill="#6b7280" text-anchor="end">Top scores per quiz</text>
+  </g>
+</svg>

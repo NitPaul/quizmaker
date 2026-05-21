@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Leaderboard preview">
+  <rect width="800" height="500" fill="#f8fafc"/>
+  <text x="40" y="58" font-family="Inter,sans-serif" font-size="22" font-weight="800" fill="#0f172a">Leaderboard · Python basics</text>
+  <text x="40" y="82" font-family="Inter,sans-serif" font-size="13" fill="#64748b">Top scores · best attempt per user</text>
+  <g transform="translate(40,110)">
+    <rect width="720" height="44" rx="8" fill="#0f172a"/>
+    <text x="20" y="28" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#cbd5e1" letter-spacing="2">RANK</text>
+    <text x="100" y="28" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#cbd5e1" letter-spacing="2">USER</text>
+    <text x="540" y="28" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#cbd5e1" letter-spacing="2" text-anchor="end">SCORE</text>
+    <text x="700" y="28" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#cbd5e1" letter-spacing="2" text-anchor="end">TIME</text>
+  </g>
+  <g transform="translate(40,162)">
+    <rect width="720" height="40" rx="8" fill="#fffbeb"/>
+    <text x="20" y="26" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#b45309">🥇 #1</text>
+    <text x="100" y="26" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#0f172a">ada_lovelace</text>
+    <text x="540" y="26" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#10b981" text-anchor="end">100%</text>
+    <text x="700" y="26" font-family="Inter,sans-serif" font-size="12" fill="#64748b" text-anchor="end">4m 18s</text>
+  </g>
+  <g transform="translate(40,208)">
+    <rect width="720" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="20" y="26" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#475569">🥈 #2</text>
+    <text x="100" y="26" font-family="Inter,sans-serif" font-size="13" fill="#0f172a">grace_h</text>
+    <text x="540" y="26" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0f172a" text-anchor="end">95%</text>
+    <text x="700" y="26" font-family="Inter,sans-serif" font-size="12" fill="#64748b" text-anchor="end">5m 02s</text>
+  </g>
+  <g transform="translate(40,254)">
+    <rect width="720" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="20" y="26" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#92400e">🥉 #3</text>
+    <text x="100" y="26" font-family="Inter,sans-serif" font-size="13" fill="#0f172a">linus_t</text>
+    <text x="540" y="26" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0f172a" text-anchor="end">90%</text>
+    <text x="700" y="26" font-family="Inter,sans-serif" font-size="12" fill="#64748b" text-anchor="end">6m 41s</text>
+  </g>
+  <g transform="translate(40,300)">
+    <rect width="720" height="44" rx="8" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+    <text x="20" y="28" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#4338ca">#4</text>
+    <text x="100" y="28" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#4338ca">you · nitpaul</text>
+    <text x="540" y="28" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#4338ca" text-anchor="end">85%</text>
+    <text x="700" y="28" font-family="Inter,sans-serif" font-size="12" fill="#6366f1" text-anchor="end">8m 12s</text>
+  </g>
+  <g transform="translate(40,350)">
+    <rect width="720" height="40" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="20" y="26" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#475569">#5</text>
+    <text x="100" y="26" font-family="Inter,sans-serif" font-size="13" fill="#0f172a">marie_c</text>
+    <text x="540" y="26" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0f172a" text-anchor="end">80%</text>
+    <text x="700" y="26" font-family="Inter,sans-serif" font-size="12" fill="#64748b" text-anchor="end">7m 30s</text>
+  </g>
+  <text x="40" y="430" font-family="Inter,sans-serif" font-size="11" fill="#94a3b8">Postgres DISTINCT ON keeps the best attempt per user · SQLite fallback in the test suite.</text>
+</svg>

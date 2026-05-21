@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="RAG builder preview">
+  <rect width="800" height="500" fill="#f8fafc"/>
+  <text x="40" y="60" font-family="Inter,sans-serif" font-size="22" font-weight="800" fill="#0f172a">Build a quiz from your PDFs</text>
+  <text x="40" y="84" font-family="Inter,sans-serif" font-size="13" fill="#64748b">Pick a document. We retrieve the most relevant chunks and generate grounded MCQs.</text>
+  <!-- doc list -->
+  <text x="40" y="124" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#94a3b8" letter-spacing="2">YOUR LIBRARY</text>
+  <g transform="translate(40,140)">
+    <rect width="360" height="64" rx="10" fill="#ffffff" stroke="#10b981" stroke-width="2"/>
+    <rect x="14" y="14" width="36" height="36" rx="8" fill="#d1fae5"/>
+    <text x="32" y="38" font-family="Inter,sans-serif" font-size="16" fill="#10b981" text-anchor="middle">📄</text>
+    <text x="62" y="32" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#0f172a">Python basics.pdf</text>
+    <text x="62" y="50" font-family="Inter,sans-serif" font-size="11" fill="#64748b">42 chunks · 12 pages · ready</text>
+    <rect x="300" y="22" width="48" height="20" rx="10" fill="#d1fae5"/>
+    <text x="324" y="36" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#065f46" text-anchor="middle">READY</text>
+  </g>
+  <g transform="translate(40,210)">
+    <rect width="360" height="64" rx="10" fill="#ffffff" stroke="#e2e8f0"/>
+    <rect x="14" y="14" width="36" height="36" rx="8" fill="#f1f5f9"/>
+    <text x="32" y="38" font-family="Inter,sans-serif" font-size="16" fill="#64748b" text-anchor="middle">📄</text>
+    <text x="62" y="32" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#0f172a">Django REST primer.pdf</text>
+    <text x="62" y="50" font-family="Inter,sans-serif" font-size="11" fill="#64748b">86 chunks · 28 pages · ready</text>
+    <rect x="300" y="22" width="48" height="20" rx="10" fill="#d1fae5"/>
+    <text x="324" y="36" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#065f46" text-anchor="middle">READY</text>
+  </g>
+  <g transform="translate(40,280)">
+    <rect width="360" height="64" rx="10" fill="#ffffff" stroke="#e2e8f0"/>
+    <rect x="14" y="14" width="36" height="36" rx="8" fill="#fef3c7"/>
+    <text x="32" y="38" font-family="Inter,sans-serif" font-size="16" fill="#d97706" text-anchor="middle">📄</text>
+    <text x="62" y="32" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#0f172a">Async Python patterns.pdf</text>
+    <text x="62" y="50" font-family="Inter,sans-serif" font-size="11" fill="#64748b">embedding 12 / 64 chunks…</text>
+    <rect x="290" y="22" width="58" height="20" rx="10" fill="#fef3c7"/>
+    <text x="319" y="36" font-family="Inter,sans-serif" font-size="10" font-weight="700" fill="#92400e" text-anchor="middle">INGESTING</text>
+  </g>
+  <!-- form panel -->
+  <g transform="translate(420,140)">
+    <rect width="340" height="320" rx="14" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="20" y="34" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#0f172a">Generate quiz</text>
+    <text x="20" y="68" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#64748b" letter-spacing="2">TOPIC / PROMPT</text>
+    <rect x="20" y="78" width="300" height="64" rx="8" fill="#f1f5f9"/>
+    <text x="32" y="100" font-family="Inter,sans-serif" font-size="12" fill="#334155">Decorators and context managers</text>
+    <text x="20" y="170" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#64748b" letter-spacing="2">QUESTIONS</text>
+    <rect x="20" y="180" width="300" height="40" rx="8" fill="#f1f5f9"/>
+    <text x="32" y="206" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#0f172a">10</text>
+    <text x="20" y="246" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#64748b" letter-spacing="2">PROVIDER</text>
+    <rect x="20" y="256" width="142" height="38" rx="8" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+    <text x="91" y="280" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#4338ca" text-anchor="middle">Groq</text>
+    <rect x="170" y="256" width="142" height="38" rx="8" fill="#f1f5f9"/>
+    <text x="241" y="280" font-family="Inter,sans-serif" font-size="12" fill="#64748b" text-anchor="middle">Gemini</text>
+  </g>
+  <rect x="440" y="468" width="300" height="16" fill="none"/>
+</svg>

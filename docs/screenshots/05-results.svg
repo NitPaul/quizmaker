@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Results page preview">
+  <rect width="800" height="500" fill="#f8fafc"/>
+  <text x="40" y="60" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#6366f1" letter-spacing="2">QUIZ COMPLETE</text>
+  <!-- big score -->
+  <g transform="translate(40,90)">
+    <rect width="340" height="200" rx="16" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="170" y="60" font-family="Inter,sans-serif" font-size="14" fill="#64748b" text-anchor="middle">Your score</text>
+    <text x="170" y="135" font-family="Inter,sans-serif" font-size="64" font-weight="800" fill="#10b981" text-anchor="middle">85%</text>
+    <text x="170" y="170" font-family="Inter,sans-serif" font-size="14" fill="#475569" text-anchor="middle">17 of 20 correct</text>
+  </g>
+  <!-- stats -->
+  <g transform="translate(400,90)">
+    <rect width="360" height="200" rx="16" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="24" y="40" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#94a3b8" letter-spacing="2">SUMMARY</text>
+    <line x1="24" y1="60" x2="336" y2="60" stroke="#f1f5f9"/>
+    <text x="24" y="90" font-family="Inter,sans-serif" font-size="13" fill="#475569">Mode</text>
+    <text x="336" y="90" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#0f172a" text-anchor="end">Exam</text>
+    <text x="24" y="120" font-family="Inter,sans-serif" font-size="13" fill="#475569">Duration</text>
+    <text x="336" y="120" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#0f172a" text-anchor="end">8m 12s</text>
+    <text x="24" y="150" font-family="Inter,sans-serif" font-size="13" fill="#475569">Provider</text>
+    <text x="336" y="150" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#0f172a" text-anchor="end">Groq llama-3.3-70b</text>
+    <text x="24" y="180" font-family="Inter,sans-serif" font-size="13" fill="#475569">Source</text>
+    <text x="336" y="180" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#0f172a" text-anchor="end">RAG · Python basics.pdf</text>
+  </g>
+  <!-- action buttons -->
+  <g transform="translate(40,310)">
+    <rect width="170" height="46" rx="10" fill="#6366f1"/>
+    <text x="85" y="29" font-family="Inter,sans-serif" font-size="14" font-weight="600" fill="#fff" text-anchor="middle">Retake quiz</text>
+  </g>
+  <g transform="translate(220,310)">
+    <rect width="170" height="46" rx="10" fill="#10b981"/>
+    <text x="85" y="29" font-family="Inter,sans-serif" font-size="14" font-weight="600" fill="#fff" text-anchor="middle">⬇  Download PDF</text>
+  </g>
+  <g transform="translate(400,310)">
+    <rect width="170" height="46" rx="10" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="85" y="29" font-family="Inter,sans-serif" font-size="14" font-weight="600" fill="#334155" text-anchor="middle">View review</text>
+  </g>
+  <!-- review snippet -->
+  <g transform="translate(40,380)">
+    <text font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#94a3b8" letter-spacing="2">REVIEW</text>
+    <g transform="translate(0,16)">
+      <rect width="720" height="32" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="14" y="21" font-family="Inter,sans-serif" font-size="12" fill="#0f172a">Q14 · pgvector index type?</text>
+      <text x="710" y="21" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#dc2626" text-anchor="end">missed — yours: IVFFlat · correct: HNSW</text>
+    </g>
+    <g transform="translate(0,56)">
+      <rect width="720" height="32" rx="8" fill="#ffffff" stroke="#e2e8f0"/>
+      <text x="14" y="21" font-family="Inter,sans-serif" font-size="12" fill="#0f172a">Q15 · embedding dimension?</text>
+      <text x="710" y="21" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#16a34a" text-anchor="end">correct — 768</text>
+    </g>
+  </g>
+</svg>

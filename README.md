@@ -1,5 +1,7 @@
 <div align="center">
 
+![QuizMaker hero](docs/hero.svg)
+
 # QuizMaker
 
 ### Turn study material into quizzes in seconds — CSV upload, AI generation from text, and RAG over your PDFs.
@@ -26,25 +28,25 @@ QuizMaker is a full-stack web app that turns notes, pasted text, or PDFs into au
 
 ---
 
-## 📸 Screenshots
+## 📸 Tour of the app
 
-> Captured screenshots live in [`docs/screenshots/`](docs/screenshots/). Drop PNGs in that folder to populate the previews below.
+> The previews below are stylized SVG mockups so the README renders cleanly out of the box. Real PNG screenshots are dropped into [`docs/screenshots/`](docs/screenshots/) as the live app is captured.
 
 | Login + marketing | Home (logged in) |
 |---|---|
-| ![Login](docs/screenshots/01-login.png) | ![Home](docs/screenshots/02-home.png) |
+| ![Login](docs/screenshots/01-login.svg) | ![Home](docs/screenshots/02-home.svg) |
 
 | Flashcard mode | Exam mode |
 |---|---|
-| ![Flashcards](docs/screenshots/03-flashcard.png) | ![Exam](docs/screenshots/04-exam.png) |
+| ![Flashcards](docs/screenshots/03-flashcard.svg) | ![Exam](docs/screenshots/04-exam.svg) |
 
 | Results + PDF export | RAG (PDF → quiz) |
 |---|---|
-| ![Results](docs/screenshots/05-results.png) | ![RAG](docs/screenshots/06-rag.png) |
+| ![Results](docs/screenshots/05-results.svg) | ![RAG](docs/screenshots/06-rag.svg) |
 
 | Leaderboard | Dark mode | Swagger UI |
 |---|---|---|
-| ![Leaderboard](docs/screenshots/07-leaderboard.png) | ![Dark mode](docs/screenshots/08-dark.png) | ![Swagger](docs/screenshots/09-swagger.png) |
+| ![Leaderboard](docs/screenshots/07-leaderboard.svg) | ![Dark mode](docs/screenshots/08-dark.svg) | ![Swagger](docs/screenshots/09-swagger.svg) |
 
 ---
 

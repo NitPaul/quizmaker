@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" role="img" aria-label="Exam mode preview">
+  <rect width="800" height="500" fill="#f8fafc"/>
+  <!-- sticky timer bar -->
+  <rect width="800" height="60" fill="#0f172a"/>
+  <text x="24" y="38" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#fff">Exam mode</text>
+  <rect x="640" y="16" width="140" height="28" rx="14" fill="#1e293b" stroke="#334155"/>
+  <text x="660" y="35" font-family="Inter,sans-serif" font-size="14" font-weight="700" fill="#34d399">⏱  12:43</text>
+  <rect x="780" y="16" width="0" height="28"/>
+  <!-- progress -->
+  <text x="24" y="92" font-family="Inter,sans-serif" font-size="12" fill="#64748b">Answered 7 / 10</text>
+  <rect x="24" y="100" width="752" height="6" rx="3" fill="#e2e8f0"/>
+  <rect x="24" y="100" width="527" height="6" rx="3" fill="#10b981"/>
+  <!-- question 1 -->
+  <g transform="translate(24,130)">
+    <rect width="752" height="100" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="20" y="32" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#6366f1" letter-spacing="2">Q1</text>
+    <text x="20" y="56" font-family="Inter,sans-serif" font-size="14" font-weight="600" fill="#0f172a">Celery uses Redis as the broker via the celery[redis] extra.</text>
+    <g transform="translate(20,68)">
+      <rect width="80" height="22" rx="11" fill="#d1fae5"/>
+      <text x="40" y="16" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#065f46" text-anchor="middle">True ✓</text>
+      <rect x="90" width="80" height="22" rx="11" fill="#f1f5f9"/>
+      <text x="130" y="16" font-family="Inter,sans-serif" font-size="11" fill="#64748b" text-anchor="middle">False</text>
+    </g>
+  </g>
+  <!-- question 2 -->
+  <g transform="translate(24,250)">
+    <rect width="752" height="100" rx="12" fill="#ffffff" stroke="#e2e8f0"/>
+    <text x="20" y="32" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#6366f1" letter-spacing="2">Q2</text>
+    <text x="20" y="56" font-family="Inter,sans-serif" font-size="14" font-weight="600" fill="#0f172a">drf-spectacular serves Swagger UI at which path?</text>
+    <g transform="translate(20,68)">
+      <rect width="120" height="22" rx="11" fill="#f1f5f9"/>
+      <text x="60" y="16" font-family="Inter,sans-serif" font-size="11" fill="#64748b" text-anchor="middle">/swagger/</text>
+      <rect x="130" width="120" height="22" rx="11" fill="#d1fae5"/>
+      <text x="190" y="16" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#065f46" text-anchor="middle">/api/docs/ ✓</text>
+      <rect x="260" width="120" height="22" rx="11" fill="#f1f5f9"/>
+      <text x="320" y="16" font-family="Inter,sans-serif" font-size="11" fill="#64748b" text-anchor="middle">/docs/</text>
+    </g>
+  </g>
+  <!-- question 3 (unanswered) -->
+  <g transform="translate(24,370)">
+    <rect width="752" height="100" rx="12" fill="#ffffff" stroke="#fde68a"/>
+    <text x="20" y="32" font-family="Inter,sans-serif" font-size="11" font-weight="700" fill="#d97706" letter-spacing="2">Q3 · unanswered</text>
+    <text x="20" y="56" font-family="Inter,sans-serif" font-size="14" font-weight="600" fill="#0f172a">JWT refresh rotation: which library is used?</text>
+  </g>
+</svg>
