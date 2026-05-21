@@ -17,6 +17,8 @@ export function RagBuilder() {
   const [provider, setProvider] = useState<AiProvider>('groq')
   const [useOwnKey, setUseOwnKey] = useState(false)
   const [apiKey, setApiKey] = useState('')
+  const [timerMinutes, setTimerMinutes] = useState(0)
+  const [allowSkip, setAllowSkip] = useState(false)
   const [taskState, setTaskState] = useState<TaskState | null>(null)
   const navigate = useNavigate()
 
@@ -48,7 +50,10 @@ export function RagBuilder() {
     },
     onSuccess: ({ quizId, mode }) => {
       setTaskState(null)
-      navigate(`/quizzes/${quizId}/play?mode=${mode}`)
+      const params = new URLSearchParams({ mode })
+      if (timerMinutes > 0) params.set('timer', String(timerMinutes * 60))
+      if (allowSkip) params.set('skip', '1')
+      navigate(`/quizzes/${quizId}/play?${params.toString()}`)
     },
     onError: () => setTaskState(null),
   })
@@ -206,7 +211,53 @@ export function RagBuilder() {
             </div>
           </Step>
 
-          <Step n={5} title="Generate and start">
+          <Step n={5} title="Options (optional)">
+            <div className="space-y-3 rounded-lg border border-slate-200 dark:border-slate-800 p-4 bg-slate-50 dark:bg-slate-950">
+              <div>
+                <label
+                  htmlFor="rag-timer"
+                  className="flex items-center gap-2 text-sm font-medium"
+                >
+                  Time limit
+                  <span className="text-xs text-slate-500 font-normal">
+                    (minutes; 0 = no time limit)
+                  </span>
+                </label>
+                <input
+                  id="rag-timer"
+                  type="number"
+                  min={0}
+                  max={180}
+                  value={timerMinutes}
+                  onChange={(e) =>
+                    setTimerMinutes(Math.max(0, Math.min(180, Number(e.target.value) || 0)))
+                  }
+                  className="mt-1 w-full rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+                {timerMinutes > 0 && (
+                  <p className="mt-1 text-xs text-amber-700 dark:text-amber-400">
+                    Quiz will auto-submit at 0:00.
+                  </p>
+                )}
+              </div>
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={allowSkip}
+                  onChange={(e) => setAllowSkip(e.target.checked)}
+                  className="mt-0.5 w-4 h-4 accent-emerald-600"
+                />
+                <span className="text-sm">
+                  <span className="font-medium block">Allow skipping questions</span>
+                  <span className="text-xs text-slate-500">
+                    Flashcard mode adds a "Skip" button. Exam mode lets you submit without answering everything. Off by default — all questions are mandatory.
+                  </span>
+                </span>
+              </label>
+            </div>
+          </Step>
+
+          <Step n={6} title="Generate and start">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               <button
                 type="button"
