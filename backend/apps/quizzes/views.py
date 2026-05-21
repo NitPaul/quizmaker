@@ -60,7 +60,12 @@ class QuizViewSet(viewsets.ModelViewSet):
         responses={200: LeaderboardSerializer},
         summary="Top-10 leaderboard for this quiz (best attempt per user)",
     )
-    @action(detail=True, methods=["get"], url_path="leaderboard", permission_classes=[permissions.IsAuthenticated])
+    @action(
+        detail=True,
+        methods=["get"],
+        url_path="leaderboard",
+        permission_classes=[permissions.IsAuthenticated],
+    )
     def leaderboard(self, request, pk=None):
         from django.db import connection
 

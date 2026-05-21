@@ -63,6 +63,9 @@ class Attempt(models.Model):
         ordering = ["-finished_at"]
         indexes = [models.Index(fields=["quiz", "-score"])]
 
+    def __str__(self) -> str:
+        return f"{self.user_id} · {self.quiz_id} · {self.score}/{self.total}"
+
     @property
     def percentage(self) -> float:
         return round(self.score / self.total * 100, 1) if self.total else 0.0
@@ -80,3 +83,6 @@ class AttemptAnswer(models.Model):
                 fields=["attempt", "question"], name="unique_attempt_question"
             ),
         ]
+
+    def __str__(self) -> str:
+        return f"answer {self.id} · {'correct' if self.is_correct else 'wrong'}"

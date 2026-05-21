@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.db.models import Max, Sum
+from django.db.models import Sum
 from drf_spectacular.utils import OpenApiResponse, extend_schema, inline_serializer
 from rest_framework import generics, permissions, serializers
 from rest_framework.response import Response

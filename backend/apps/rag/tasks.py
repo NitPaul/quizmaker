@@ -39,7 +39,7 @@ def ingest_document(self, document_id: int) -> dict:
                         text=chunk,
                         embedding=embedding,
                     )
-                    for i, (chunk, embedding) in enumerate(zip(chunks, embeddings))
+                    for i, (chunk, embedding) in enumerate(zip(chunks, embeddings, strict=True))
                 ]
             )
             document.page_count = pages
