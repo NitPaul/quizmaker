@@ -4,21 +4,84 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Primary SEO -->
+    <title>QuizMaker — Free AI Quiz Maker from PDF, Text & CSV</title>
     <meta
       name="description"
-      content="QuizMaker — Turn study material into quizzes in seconds. CSV upload, AI generation from text, and RAG over your PDFs."
+      content="Create quizzes online for free. QuizMaker turns your PDFs, notes, and CSV files into AI-generated multiple-choice quizzes with flashcards, exam mode, and instant scoring."
     />
+    <meta
+      name="keywords"
+      content="free quiz maker, AI quiz generator, create quiz online, quiz from PDF, quiz maker, flashcard maker, MCQ generator, study quiz, practice test maker, exam generator"
+    />
+    <meta name="author" content="Nit Paul" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://quizmaker-puce.vercel.app/" />
     <meta name="theme-color" content="#6366f1" />
-    <meta property="og:title" content="QuizMaker" />
+
+    <!-- Open Graph (Facebook, LinkedIn) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="QuizMaker" />
+    <meta property="og:url" content="https://quizmaker-puce.vercel.app/" />
+    <meta property="og:title" content="QuizMaker — Free AI Quiz Maker from PDF, Text & CSV" />
     <meta
       property="og:description"
-      content="Turn study material into quizzes in seconds. CSV upload, AI generation from text, and RAG over your PDFs."
+      content="Create quizzes online for free. Turn PDFs, notes, or CSV files into AI-generated multiple-choice quizzes with flashcards, exam mode, and instant scoring."
     />
-    <meta property="og:type" content="website" />
-    <title>QuizMaker — Study smarter</title>
+    <meta property="og:image" content="https://quizmaker-puce.vercel.app/og-image.svg" />
+    <meta property="og:image:alt" content="QuizMaker — turn study material into quizzes in seconds" />
+    <meta property="og:locale" content="en_US" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="QuizMaker — Free AI Quiz Maker from PDF, Text & CSV" />
+    <meta
+      name="twitter:description"
+      content="Create quizzes online for free. Turn PDFs, notes, or CSV files into AI-generated multiple-choice quizzes."
+    />
+    <meta name="twitter:image" content="https://quizmaker-puce.vercel.app/og-image.svg" />
+
+    <!-- Structured data: free WebApplication -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "QuizMaker",
+        "url": "https://quizmaker-puce.vercel.app/",
+        "description": "Free AI quiz maker that turns PDFs, notes, and CSV files into multiple-choice quizzes with flashcards, exam mode, and instant scoring.",
+        "applicationCategory": "EducationalApplication",
+        "operatingSystem": "Web browser",
+        "offers": {
+          "@type": "Offer",
+          "price": "0",
+          "priceCurrency": "USD"
+        },
+        "featureList": [
+          "Generate quizzes from PDFs using RAG",
+          "Generate quizzes from pasted text with AI",
+          "Create quizzes from CSV or Excel files",
+          "Flashcard and exam modes",
+          "Instant scoring and leaderboard"
+        ],
+        "author": {
+          "@type": "Person",
+          "name": "Nit Paul",
+          "url": "https://github.com/NitPaul"
+        }
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
+    <noscript>
+      <h1>QuizMaker — Free AI Quiz Maker</h1>
+      <p>
+        QuizMaker is a free online tool that turns your PDFs, notes, and CSV files into
+        AI-generated multiple-choice quizzes. Study with flashcards, take timed exams, and
+        track your scores. JavaScript is required to run the app.
+      </p>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
